@@ -1,0 +1,982 @@
+#JDBC Program to create, retrieve, insert, delete and update student data
+//Program to Create Table in MySQL
+import java.sql.*; 
+public class CreateTable
+{ 
+public static void main(String args[]) 
+{ 
+try 
+{ 
+//com.mysql.cj.jdbc.Driver
+Class.forName("com.mysql.cj.jdbc.Driver"); 
+Connection 
+con=DriverManager.getConnection("jdbc:mysql://localhost:3306/student","root",""); 
+Statement st=con.createStatement(); 
+st.executeUpdate("create table csed ( rollno varchar(10), name varchar(20))"); 
+System.out.println("Table Created"); 
+con.close(); 
+} 
+catch(Exception e) 
+{ 
+System.out.println(e); 
+} 
+} 
+}
+
+//Program to Insert Student Data 
+import java.sql.*; 
+import java.util.*; 
+public class InsertTable
+{ 
+public static void main(String args[]) { 
+try { 
+Class.forName("com.mysql.cj.jdbc.Driver"); 
+Connection con = 
+DriverManager.getConnection("jdbc:mysql://localhost:3306/studentinfo","root",""); 
+Statement st=con.createStatement(); 
+Scanner sc = new Scanner(System.in); 
+System.out.println("Eneter the student details"); 
+int sid = sc.nextInt(); 
+String sname= sc.next(); 
+String scontact= sc.next(); 
+String saddr = sc.next(); 
+int savg=sc.nextInt(); 
+String qry = "INSERT INTO student(id,name,contact,address,avg) VALUES 
+("+sid+",'"+sname+"','"+scontact+"','"+saddr+"',"+savg+")"; 
+st.executeUpdate(qry); 
+con.close(); 
+} 
+catch(Exception e) 
+{ 
+System.out.println(e); 
+} 
+System.out.println("Row Inserted"); 
+} 
+} 
+
+
+//Program to Retrieve Data from Database 
+import java.sql.*; 
+public class GetTable
+{ 
+public static void main(String args[]) 
+{ 
+try 
+{ 
+Class.forName("com.mysql.cj.jdbc.Driver"); 
+Connection con = 
+DriverManager.getConnection("jdbc:mysql://localhost:3306/studentinfo","root",""); 
+Statement st=con.createStatement(); 
+ResultSet rs = st.executeQuery("select * from student"); 
+System.out.println("The Student Details are \n"); 
+while(rs.next()) 
+{ 
+System.out.println(rs.getInt(1)+":"+rs.getString(2)+":"+ rs.getString(3)+":"+rs.getString(4) 
++":" + rs.getInt(5)); 
+} 
+con.close(); 
+} 
+catch(Exception e) 
+{ 
+System.out.println(e); 
+} 
+} 
+}
+
+
+//Program to Update a field in Database 
+import java.sql.*; 
+import java.util.*; 
+public class UpdateTable
+{ 
+public static void main(String args[]) 
+{ 
+try 
+{ 
+Class.forName("com.mysql.cj.jdbc.Driver"); 
+Connection con = 
+DriverManager.getConnection("jdbc:mysql://localhost:3306/studentinfo","root",""); 
+Statement st=con.createStatement(); 
+Scanner sc = new Scanner(System.in); 
+System.out.println("Enter the Studen Id to Update contact info"); 
+int sid = sc.nextInt(); 
+System.out.println("Enter the Phone no to update"); 
+String scontact = sc.next(); 
+String qry = "UPDATE student SET contact='"+scontact+"' WHERE id="+sid+""; 
+//String qry = "UPDATE student SET contact='123456' WHERE id=1234; 
+st.executeUpdate(qry); 
+con.close(); 
+} 
+catch(Exception e) 
+{ 
+System.out.println(e); 
+} 
+System.out.println("Row Updated"); 
+} 
+}
+
+
+//Program to delete a Record in Table 
+import java.sql.*; 
+import java.util.*; 
+public class DeleteTable
+{ 
+public static void main(String args[]) 
+{ 
+try 
+{ 
+Class.forName("com.mysql.cj.jdbc.Driver"); 
+Connection 
+con=DriverManager.getConnection("jdbc:mysql://localhost:3306/studentinfo","root","")
+; 
+Statement st=con.createStatement(); 
+Scanner sc = new Scanner(System.in); 
+System.out.println("Enter the record to be deleted"); 
+int sid = sc.nextInt(); 
+String qry = "DELETE FROM student WHERE id="+sid+""; 
+st.executeUpdate(qry); 
+con.close(); 
+} 
+catch(Exception e) 
+{ 
+System.out.println(e); 
+} 
+System.out.println("Row Effected / Deleted"); 
+} 
+}
+
+week-6 
+
+JDBC program to create, retrieve, insert, delete and update student data 
+using Prepared Statement.
+6a(i)
+Output
+Program to Create Table in Mysql - using Prepared Statement
+import java.sql.*;
+public class CreateTablePrepared
+{
+public static void main(String args[])
+{
+try {
+Class.forName("com.mysql.cj.jdbc.Driver"); 
+Connection 
+con=DriverManager.getConnection("jdbc:mysql://localhost:3306/studentinfo","root",""); 
+Statement st=con.createStatement();
+String qry="create table student1 ( id int(5), name varchar(20), contact varchar(10), 
+address varchar(20), avg int(10) )";
+PreparedStatementps = con.prepareStatement(qry); 
+ps.executeUpdate();
+System.out.println("Table Created");
+con.close();
+}
+catch(Exception e)
+{
+System.out.println(e);
+}
+}
+
+
+
+//Program to insert Student Data - using Prepared Statement 
+import java.sql.*;
+import java.util.*; 
+public class InsertTablePrepared
+{
+public static void main(String args[ ]) 
+ { 
+try 
+{
+Class.forName("com.mysql.cj.jdbc.Driver");
+Connection con = 
+DriverManager.getConnection("jdbc:mysql://localhost:3306/studentinfo","root","");
+Statement st=con.createStatement(); 
+Scanner sc = new Scanner(System.in);
+System.out.println("Eneter the student details")
+int sid = sc.nextInt();
+String sname= sc.next(); 
+String scontact=sc.next(); 
+String saddr = sc.next(); 
+int savg=sc.nextInt();
+String qry = "INSERT INTO student1(id,name,contact,address,avg) VALUES (?,?,?,?,?)";
+PreparedStatementps = con.prepareStatement(qry); 
+ps.setInt(1,sid); 
+ps.setString(2,sname);
+ps.setString(3,scontact); 
+ps.setString(4,saddr);
+ps.setInt(5,savg); 
+ps.executeUpdate(); 
+con.close();
+}
+catch(Exception e){ System.out.println(e); 
+}
+System.out.println("Row Inserted"); 
+} 
+}
+
+
+//Program to retrieve Data from Database-using prepared statement 
+import java.sql.*;
+import java.util.*; 
+public class GetTablePrepared
+{
+public static void main(String args[ ])
+{
+try 
+{
+Class.forName("com.mysql.cj.jdbc.Driver");
+Connectioncon=DriverManager.getConnection("jdbc:mysql://localhost:3306/studentinfo"
+,"root","");
+Scanner sc = new Scanner(System.in); 
+System.out.println("Enter the average"); 
+int savg = sc.nextInt();
+String qry = "select * from student1 where avg <= ?";
+PreparedStatementps = con.prepareStatement(qry); ps.setInt(1,savg);
+ResultSet rs = ps.executeQuery();
+System.out.println("The Student Details are \n"); 
+while(rs.next())
+{
+System.out.println(rs.getInt(1)+":"+rs.getString(2)+":"+ rs.getString(3)+":"+rs.getString(4) 
++":" + rs.getInt(5));
+}
+con.close();
+}
+catch(Exception e){ 
+System.out.println(e);
+}
+} 
+}
+
+
+
+//Program to update a field in Database-using Prepared Statement 
+import java.sql.*;
+import java.util.*;
+public class UpdateTablePrepared{
+public static void main(String args[]) 
+{ 
+try{
+Class.forName("com.mysql.cj.jdbc.Driver");
+Connection 
+con=DriverManager.getConnection("jdbc:mysql://localhost:3306/studentinfo","root","");
+Statement st=con.createStatement(); 
+Scanner sc = new Scanner(System.in);
+System.out.println("Enter the Studen Id to Update contact info");
+int sid = sc.nextInt();
+System.out.println("Enter the Phone no to update"); 
+String scontact = sc.next();
+String qry = "UPDATE student1 SET contact=? WHERE id=?";
+PreparedStatementps = con.prepareStatement(qry);
+ps.setString(1,scontact);
+ps.setInt(2,sid); 
+ps.executeUpdate();
+con.close();
+}
+catch(Exception e){
+System.out.println(e);
+}
+System.out.println("Row Updated");
+} 
+}
+
+
+//Programto Delete a Record in Table-using PreparedStatement 
+import java.sql.*;
+import java.util.*;
+public class DeleteTablePrepared{
+public static void main(String args[])
+{
+try{
+Class.forName("com.mysql.cj.jdbc.Driver"); 
+Connection 
+con=DriverManager.getConnection("jdbc:mysql://localhost:3306/studentinfo","root","");
+Statement st=con.createStatement();
+Scanner sc = new Scanner(System.in); 
+System.out.println("Enter the record to be deleted");
+int sid = sc.nextInt();
+String qry = "DELETE FROM student1 WHERE id=?";
+PreparedStatementps = con.prepareStatement(qry); 
+ps.setInt(1,sid);
+ps.executeUpdate(); 
+con.close();
+}
+catch(Exception e)
+{
+System.out.println(e);
+}
+System.out.println("Row Effected / Deleted");
+}
+}
+
+
+6b JDBC program to retrieve student data using Callable Statement.
+// Program to insert data 
+import java.sql.*;
+import java.util.*;
+public class CallableInsert
+{
+public static void main(String args[])
+{
+try{
+Class.forName("com.mysql.cj.jdbc.Driver");
+Connection 
+con=DriverManager.getConnection("jdbc:mysql://localhost:3306/studentinfo","root","");
+CallableStatementst=con.prepareCall("{call INSERTDATA(?,?,?,?,?)}"); 
+Scanner sc = new Scanner(System.in); 
+System.out.println("Enter Student ID");
+String id= sc.next(); 
+System.out.println("Enter Student Name"); 
+String name = sc.next(); 
+System.out.println("Enter Student Contact"); 
+String contact= sc.next();
+System.out.println("Enter Student Address"); 
+String address = sc.next(); 
+System.out.println("Enter Student Average");
+String avg = sc.next();
+st.setString(1,id); 
+st.setString(2,name);
+st.setString(3,contact); 
+st.setString(4,address);
+st.setString(5,avg); 
+st.executeUpdate();
+con.close();
+}
+catch(Exception e){
+System.out.println(e);
+}
+System.out.println("Row Inserted");
+}
+}
+
+
+// Program to retrieve student data
+import java.sql.*; 
+import java.util.*; 
+public class CallableDemo { 
+public static void main(String args[]) { 
+try { 
+Class.forName("com.mysql.cj.jdbc.Driver"); 
+Connection 
+con=DriverManager.getConnection("jdbc:mysql://localhost:3306/studentinfo","root",""); 
+CallableStatementst=con.prepareCall("{call GETDATA()}"); 
+ResultSet rs=st.executeQuery();
+while(rs.next()){
+System.out.println(rs.getInt(1)+"----"+rs.getString(2)+"----"+rs.getInt(3)+"----
+"+rs.getString(4) +)+"----"+rs.getInt(5));
+System.out.println(); } 
+con.close(); 
+} 
+catch(Exception e) { 
+System.out.println(e); 
+ }
+
+
+
+week-7 (a) Servlet program to read the parameters from user form (name, age) anddisplay using servlet response
+
+Index.html
+<form action="details" method="get">
+User Name: <input type="text" name="uname"><br>
+Contact No: <input type="text" name="cno"><br>
+<input type="submit" value="submit">
+</form>
+ServletRequest.java
+import javax.servlet.http.*; 
+import javax.servlet.*; 
+import java.io.*; 
+public class ServletRequest extends HttpServlet{ 
+ public void doGet(HttpServletRequestreq,HttpServletResponse res) throws 
+ServletException,IOException
+ { 
+res.setContentType("text/html"); 
+PrintWriterpwriter=res.getWriter(); 
+ String name = req.getParameter("uname");
+ String contact = req.getParameter("cno");
+pwriter.println("!Welcome: "+name); 
+pwriter.println("Your Contact no: "+contact); 
+pwriter.close(); 
+ } 
+}
+web.xml(Deployment Descriptor)
+<web-app>
+<servlet>
+<servlet-name>ServletRequest</servlet-name>
+<servlet-class>ServletRequest</servlet-class>
+</servlet>
+<servlet-mapping>
+<servlet-name>ServletRequest</servlet-name>
+<url-pattern> /details</ url-pattern >
+</servlet-mapping>
+</web-app>
+
+/*
+NOTE: Follow the below steps to deploy your application in tomcat server: 
+Step1: Create an application folder named ServletRequest
+Step2: ServletRequest folder should contains index.html program, WEB-INF folder and src folder 
+optional to store Servlet code
+Step3: WEB-INF folder should contain classes folder and web.xml file
+Step4: Compile your Servlet code and place the compiled .class file in classes folder under WEBINF folder
+Step5: Place the total application folder into the C:\xampp\tomcat\webapps folder 
+Step6: On Xampp control panel and start tomcat service, open the browser and type 
+localhost:8080 in url bar
+Step7: Under tomcat server click on manager apps where you can view your application
+*/
+
+7b. Servlet program to read initialization parameters using ServletConfig
+import java.io.*;
+import javax.servlet.*;
+import javax.servlet.http.*;
+import java.util.Enumeration;
+public class DemoConfig extends HttpServlet {
+ protected void doGet(HttpServletRequest request, HttpServletResponse response) 
+throws ServletException, IOException
+ {
+response.setContentType("text/html;charset=UTF-8");
+PrintWriterpwriter = response.getWriter();
+ ServletConfig sc=getServletConfig();
+ Enumeration<String> e=sc.getInitParameterNames();
+ String str;
+ while(e.hasMoreElements()) {
+str=e.nextElement();
+pwriter.println("<br>Param Name: "+str);
+pwriter.println(" value: "+sc.getInitParameter(str));
+ }
+ }
+}
+web.xml (Deployment Descriptor)
+<web-app>
+<servlet>
+<servlet-name>DemoConfig</servlet-name>
+<servlet-class>DemoConfig</servlet-class>
+<init-param>
+<param-name>MyName</param-name>
+<param-value>D Ganesh</param-value>
+</init-param>
+<init-param>
+<param-name>MyWebsite</param-name>
+<param-value>vardhaman.org</param-value>
+</init-param>
+</servlet>
+<servlet-mapping>
+<servlet-name>DemoConfig</servlet-name>
+<url-pattern>/DemoConfig</url-pattern >
+</servlet-mapping>
+</web-app>
+
+
+
+8a. Servlet program to demonstrate cookie management.
+
+
+Index.html
+<html>
+<body>
+<center>
+<form name="f1" method="post" action="AddCookie">
+<table>
+<tr>
+<td><B>User Name:</td>
+<td><input type="text" name="un" size="25" value=""></td>
+</tr>
+<tr>
+<td><B>Mobile No:</td>
+<td><input type="text" name="no" size="25" value=""></td>
+</tr>
+</table>
+<input type="submit" value="Submit">
+</body>
+</html>
+AddCookie.java
+import java.io.*;
+import javax.servlet.*;
+import javax.servlet.http.*;
+public class AddCookie extends HttpServlet
+{
+public void doPost(HttpServletRequestreq, HttpServletResponse res) 
+throws ServletException, IOException
+{
+String name = req.getParameter("un");
+String cellno=req.getParameter("no");
+Cookie ck = new Cookie("Name", name);
+Cookie ck1=new Cookie("CellNumber",cellno);
+ck.setMaxAge(24*60*60);
+ck1.setMaxAge(24*60*60);
+res.addCookie(ck);
+res.addCookie(ck1);
+res.setContentType("text/html");
+PrintWriter pw = res.getWriter();
+pw.println("<B>Cookie is Created and sent to Client Browser");
+pw.println("<br/>");
+pw.println("Welcome to " +name);
+pw.println("Your Cell Number is:"+cellno+" <br/>");
+pw.close();
+}
+}
+
+
+ReadCookie.java
+// Import required java libraries
+import java.io.*;
+import javax.servlet.*;
+import javax.servlet.http.*;
+// Extend HttpServlet class
+public class ReadCookie extends HttpServlet {
+ public void doGet(HttpServletRequest request, HttpServletResponse response)
+ throws ServletException, IOException {
+ Cookie cookie = null;
+ Cookie[] cookies = null;
+ // Get an array of Cookies associated with this domain
+ cookies = request.getCookies();
+ // Set response content type
+response.setContentType("text/html");
+PrintWriter out = response.getWriter();
+ String title = "Reading Cookies Example";
+ String docType =
+ "<!doctype html public \"-//w3c//dtd html 4.0 " +
+ "transitional//en\">\n";
+out.println(docType +
+ "<html>\n" +
+ "<head><title>" + title + "</title></head>\n" +
+ "<body bgcolor = \"#f0f0ab\">\n" );
+ if( cookies != null ) {
+out.println("<h2> Found Cookies Name and Value</h2>");
+ for (int i = 0; i <cookies.length; i++) {
+ cookie = cookies[i];
+out.print("Name : " + cookie.getName( ) + ", ");
+out.print("Value: " + cookie.getValue( ) + " <br/>");
+ }
+ } else {
+out.println("<h2>No cookies founds</h2>");
+ }
+out.println("</body>");
+out.println("</html>");
+ }
+}
+web.xml(Deployment Descriptor)
+<?xml version="1.0" encoding="UTF-8" ?>
+<web-app>
+<servlet>
+<servlet-name>AddCookie</servlet-name>
+<servlet-class>AddCookie</servlet-class>
+</servlet>
+<servlet-mapping>
+<servlet-name>AddCookie</servlet-name>
+<url-pattern>/AddCookie</url-pattern>
+</servlet-mapping>
+<servlet>
+<servlet-name>ReadCookie</servlet-name>
+<servlet-class>ReadCookie</servlet-class>
+</servlet>
+<servlet-mapping>
+<servlet-name>ReadCookie</servlet-name>
+<url-pattern>/ReadCookie</url-pattern>
+</servlet-mapping>
+</web-app>
+
+
+8b. Servlet program to insert data into student table.
+
+Index.html
+<html>
+<body>
+<center>
+<form name="f1" method="post" action="AddStudent">
+<table>
+<tr>
+<td><B>Student ID:</td>
+<td><input type="number" name="sid" size="25" value=""></td>
+</tr>
+<tr>
+<td><B>Student Name:</td>
+<td><input type="text" name="sname" size="25" value=""></td>
+</tr>
+<tr>
+<td><B>Student Contact:</td>
+<td><input type="text" name="scell" size="25" value=""></td>
+</tr>
+<tr>
+<td><B>Student Address:</td>
+<td><input type="text" name="saddr" size="50" value=""></td>
+</tr>
+<tr>
+<td><B>Average Marks:</td>
+<td><input type="number" name="savg" size="3" value=""></td>
+</tr>
+</table>
+<input type="submit" value="Submit">
+</body>
+</html>
+AddStudent.java
+import java.io.*;
+import java.sql.*;
+import javax.servlet.*;
+import javax.servlet.http.*;
+public class AddStudent extends HttpServlet
+{
+protected void doPost(HttpServletRequestreq, HttpServletResponse res)
+throws ServletException,IOException
+{
+PrintWriter pw = res.getWriter();
+res.setContentType("text/html"); 
+int sid = Integer.parseInt(req.getParameter("sid"));
+String sname = req.getParameter("sname");
+String scell = req.getParameter("scell");
+String saddr = req.getParameter("saddr");
+int savg = Integer.parseInt(req.getParameter("savg"));
+pw.println(sid);
+pw.println(sname);
+pw.println(scell);
+pw.println(saddr);
+try
+{
+Class.forName("com.mysql.cj.jdbc.Driver"); 
+Connection con =
+DriverManager.getConnection("jdbc:mysql://localhost:3306/studentinfo","root",""); 
+Statement st=con.createStatement(); 
+String qry = "INSERT INTO student(id,name,contact,address,avg) VALUES 
+("+sid+",'"+sname+"','"+scell+"','"+saddr+"',"+savg+")"; 
+st.executeUpdate(qry); 
+pw.println("Data Inserted");
+pw.close();
+con.close();
+}
+catch (Exception e)
+{
+e.printStackTrace();
+}
+}
+}
+web.xml(Deployment Descriptor)
+<?xml version="1.0" encoding="UTF-8" ?>
+<web-app>
+<servlet>
+<servlet-name>AddStudent</servlet-name>
+<servlet-class>AddStudent</servlet-class>
+</servlet>
+<servlet-mapping>
+<servlet-name>AddStudent</servlet-name>
+<url-pattern>/AddStudent</url-pattern>
+</servlet-mapping>
+</web-app>
+
+
+
+9a. JSP Program to print multiplication table.
+
+index.html
+<html>
+<body>
+<h2>Enter Any 2 Numbers !!</h2>
+<form action="Table2.jsp" method="post">
+First No: <input type="text" name="fno"><br>
+Second No: <input type="text" name="sno"><br>
+<input type="submit" value="Show Tables">
+</form>
+<h5>VCE-WT</h5>
+</body>
+table2.jsp
+<html>
+<body>
+<%
+int num1=Integer.parseInt(request.getParameter("fno"));
+int num2=Integer.parseInt(request.getParameter("sno"));
+int range=0;%>
+<h5><center>TABLES FROM <%=num1 %> to <%=num2 %></center></h5>
+<table cellpadding=0 cellspacing=0 align='center' bgcolor='yellow' width=70% >
+<%
+try
+{
+for (int j = 1; j <= 10; j++) {
+%><tr><th>|</th><%
+for (range = num1; range <= num2; range++) { %><td align='center'><%
+out.println(range);
+%></td><td align='center'><%
+out.println("*");
+%></td><td align='center'><%
+out.println(j);
+%></td><td align='center'><%
+out.println(" = ");
+%></td><td align='center'><%
+out.println(range * j);
+%><th>|</th><%
+}
+%></tr><% } }
+catch(Exception e) {
+out.println("Error"); }
+%>
+</table>
+</body>
+</html>
+
+
+/* 
+Step1: Create a folder name week9_multiplication and place in the following path if you xampp 
+is installed in c drive path: C:\xampp\tomcat\webapps\ROOT
+Step2: On Xampp Control Panel, on tomcat service, mysql and Apache
+Step3: On browser and type the following in url to run the program
+*/
+
+10a. JSP Program to access a java bean component.
+
+index.jsp
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>useBean, getProperty and setProperty example</title>
+</head>
+<body>
+<form action="userdetails.jsp" method="post">
+User Name: <input type="text" name="username"><br>
+User Password: <input type="password" name="password"><br>
+User Age: <input type="text" name="age"><br>
+<input type="submit" value="register">
+</form>
+</body></html>
+Userdetails.jsp
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<jsp:useBean id="userinfo" class="ganesh.Details"></jsp:useBean>
+<jsp:setProperty property="*" name="userinfo"/>
+You have enterted below details:<br>
+Your Name: <jsp:getProperty property="username" name="userinfo"/><br>
+Your Password:<jsp:getProperty property="password" name="userinfo"/><br>
+Your Age:<jsp:getProperty property="age" name="userinfo" /><br>
+JavaBean class: Details.java
+package ganesh;
+public class Details {
+public Details() {}
+ private String username;
+ private int age;
+ private String password;
+public String getUsername() {
+return username;
+}
+public void setUsername(String username) {
+this.username = username;
+}
+public int getAge() {
+return age;}
+public void setAge(int age) {
+this.age = age;}
+public String getPassword() {
+return password;}
+public void setPassword(String password) {
+this.password = password;
+}
+}
+
+10b JSP Program to authenticate the login details. If user is valid forward the control to success.html otherwise forward to 
+fail.html 
+
+index.jsp
+<%@ page import="java.sql.*" %>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Home</title>
+</head>
+<body>
+<%
+Connection con= null;
+PreparedStatementps = null;
+ResultSet rs = null;
+String driverName = "com.mysql.jdbc.Driver";
+String url = "jdbc:mysql://localhost:3306/student";
+String user = "root";
+String password = "";
+String sql = "select usertype from login";
+try {
+Class.forName(driverName);
+con = DriverManager.getConnection(url, user, password);
+ps = con.prepareStatement(sql);
+rs = ps.executeQuery(); 
+%>
+<form method="post" action="login.jsp">
+<center><h2 style="color:green">JSP Login Example</h2></center>
+<table border="1" align="center">
+<tr>
+<td>Enter Your Name :</td>
+<td><input type="text" name="name"/></td>
+</tr>
+<tr>
+<td>Enter Your Password :</td>
+<td><input type="password" name="password"/></td>
+</tr>
+<tr>
+<td>Select UserType</td>
+<td><select name="usertype">
+<option value="select">select</option>
+<%
+while(rs.next())
+{
+String usertype = rs.getString("usertype");
+%>
+<option value=<%=usertype%>><%=usertype%></option>
+<% 
+}
+}
+catch(SQLExceptionsqe)
+{
+out.println("home"+sqe);
+}
+%>
+</select>
+</td>
+</tr>
+<tr>
+<td></td>
+<td><input type="submit" value="submit"/></td>
+</table>
+</form>
+</body>
+</html>
+Login.jsp
+<%@page import="java.sql.SQLException"%>
+<%@page import="java.sql.DriverManager"%>
+<%@page import="java.sql.ResultSet"%>
+<%@page import="java.sql.PreparedStatement"%>
+<%@page import="java.sql.Connection"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Login</title>
+</head>
+<body>
+<%! String userdbName;
+String userdbPsw;
+String dbUsertype;
+%>
+<%
+Connection con= null;
+PreparedStatementps = null;
+ResultSet rs = null;
+String driverName = "com.mysql.jdbc.Driver";
+String url = "jdbc:mysql://localhost:3306/student";
+String user = "root";
+String dbpsw = "";
+String sql = "select * from login where uname=? and upass=? and usertype=?";
+String name = request.getParameter("name");
+String password = request.getParameter("password");
+String usertype = request.getParameter("usertype");
+if((!(name.equals(null) || name.equals("")) && !(password.equals(null) || 
+password.equals(""))) && !usertype.equals("select"))
+{
+try{
+Class.forName(driverName);
+con = DriverManager.getConnection(url, user, dbpsw);
+ps = con.prepareStatement(sql);
+ps.setString(1, name);
+ps.setString(2, password);
+ps.setString(3, usertype);
+rs = ps.executeQuery();
+if(rs.next())
+{ 
+userdbName = rs.getString("uname");
+userdbPsw = rs.getString("upass");
+dbUsertype = rs.getString("usertype");
+if(name.equals(userdbName) &&password.equals(userdbPsw) &&usertype.equals(dbUsertype))
+{
+session.setAttribute("name",userdbName);
+session.setAttribute("usertype", dbUsertype); 
+response.sendRedirect("welcome.jsp"); 
+} 
+}
+else
+response.sendRedirect("error.jsp");
+rs.close();
+ps.close(); 
+}
+catch(SQLExceptionsqe)
+{
+out.println(sqe);
+} 
+}
+else
+{
+%>
+<center><p style="color:red">Error In Login</p></center>
+<% 
+getServletContext().getRequestDispatcher("index.jsp").include(request, 
+response);
+}
+%>
+</body>
+</html>
+Welcome.jsp
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Welcome</title>
+</head>
+<body>
+<p>Welcome, <%=session.getAttribute("name")%></p>
+<p><a href="logout.jsp">Logout</a>
+</body>
+</html>
+Error.jsp
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Login Error</title>
+</head>
+<body>
+<center><p style="color:red">Sorry, your record is not available.</p></center>
+<%
+getServletContext().getRequestDispatcher("/index.jsp").include(request, response);
+%>
+</body>
+</html>
+Logout.jsp
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Logout</title>
+</head>
+<body>
+<% session.invalidate(); %>
+<p>You have been successfully logout</p>
+</body>
+</html>
+
+
+9c (c) JSP Program to retrieve the student data from database.
+
+
+<html>
+<body>
+<h1>Retrieve data from database in jsp</h1>
+<table border="1">
+<tr>
+<th>username</th>
+<th>password</th>
+<th>usertype</th>
+</tr>
+<%
+try{
+Class.forName("com.mysql.jdbc.Driver");
+Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3307/student", "root" ,"" );
+Statement st=con.createStatement();
+String sql ="select * from login";
+ResultSet rs= st.executeQuery(sql);
+while(rs.next()){
+%>
+<tr>
+<td><%=rs.getString("username") %></td>
+<td><%=rs.getString("password") %></td>
+<td><%=rs.getString("usertype") %></td>
+</tr>
+<%
+}con.close();
+} catch (Exception e) {
+e.printStackTrace();
+}
+%></table></body></html>
